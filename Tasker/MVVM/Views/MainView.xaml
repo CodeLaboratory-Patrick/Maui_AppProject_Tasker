@@ -36,7 +36,8 @@
 
         <Grid Grid.Row="2" RowDefinitions=".2*, .8*">
             <Label StyleClass="LightBlue, SubHeader" Text="PENDING TASKS" />
-            <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}">
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BorderColor="Transparent">
