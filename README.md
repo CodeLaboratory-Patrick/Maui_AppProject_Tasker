@@ -201,7 +201,7 @@ The following table summarizes important properties from the XAML file:
 3. [Grid Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/grid)
 
 ---
-# ⭐️ Analysis of NewTaskView.xaml Analysis
+# ⭐️ Analysis of NewTaskView.xaml
 
 This document provides an in-depth analysis of the `NewTaskView.xaml` file, which defines a UI page for adding new tasks in a task management application, presumably named **Tasker**. This page uses .NET MAUI or Xamarin.Forms to manage the task creation process with a clean and user-friendly interface. Below, we will discuss the structure, features, properties, and key components involved in this XAML file.
 
@@ -312,3 +312,160 @@ Below is a summary of important properties from the XAML file:
 2. [CollectionView in MAUI - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/collectionview?view=net-maui-7.0)
 3. [RadioButton Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/radiobutton)
 
+---
+# ⭐️ Analysis of MainView.xaml.cs and NewTaskView.xaml.cs 
+
+This document provides an analysis of two C# code-behind files for the `MainView` and `NewTaskView` pages of the **Tasker** application. These files serve as the backend logic for the corresponding XAML files, managing user interactions and providing dynamic behavior to the application. Let's dive into each file and examine their functionality, properties, and how they contribute to the overall app behavior.
+
+## MainView.xaml.cs Analysis
+The `MainView.xaml.cs` file defines the code-behind for the **MainView** page.
+
+### Key Features
+- **INotifyPropertyChanged Implementation**: The `[AddINotifyPropertyChangedInterface]` attribute is used, indicating that this class automatically implements `INotifyPropertyChanged`. This ensures that changes in properties are automatically reflected in the UI.
+- **Data Binding**: The `BindingContext` of the page is set to an instance of `MainViewModel`, which holds the data and business logic for this view.
+- **Event Handlers**: Two event handlers are defined: `checkBox_CheckedChanged` for checkbox interactions and `Button_Clicked` for navigation purposes.
+
+### Code Breakdown
+```csharp
+using PropertyChanged;
+using Tasker.MVVM.ViewModels;
+
+namespace Tasker.MVVM.Views;
+
+[AddINotifyPropertyChangedInterface]
+public partial class MainView : ContentPage
+{
+    private MainViewModel mainViewModel = new MainViewModel();
+    public MainView()
+    {
+        InitializeComponent();
+        BindingContext = mainViewModel;
+    }
+
+    private void checkBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        mainViewModel.UpdateData();
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        var taskView = new NewTaskView
+        {
+            BindingContext = new NewTaskViewModel
+            {
+                Tasks = mainViewModel.Tasks,
+                Categories = mainViewModel.Categories,
+            }
+        };
+
+        Navigation.PushAsync(taskView);
+    }   
+}
+```
+
+### Properties and Methods Explained
+| Property/Method            | Description |
+|----------------------------|-------------|
+| `[AddINotifyPropertyChangedInterface]` | Automates property change notification for UI binding. |
+| `MainViewModel mainViewModel` | An instance of `MainViewModel` that acts as the data context for this view. |
+| `BindingContext = mainViewModel` | Sets the data context for binding UI elements to properties in `MainViewModel`. |
+| `checkBox_CheckedChanged` | Invoked when the checkbox state changes, calls `mainViewModel.UpdateData()`. |
+| `Button_Clicked` | Handles button clicks to navigate to `NewTaskView` for adding a new task, while also setting its `BindingContext` to `NewTaskViewModel`. |
+
+### Features Highlight
+- **Navigation to NewTaskView**: When the button is clicked, a new instance of `NewTaskView` is created and pushed onto the navigation stack. The `BindingContext` for `NewTaskView` is set with data from `MainViewModel`, providing consistency in task and category information.
+
+## NewTaskView.xaml.cs Analysis
+The `NewTaskView.xaml.cs` file handles the interactions for adding new tasks or categories in the **NewTaskView** page.
+
+### Key Features
+- **Command Handlers for User Actions**: Methods such as `AddTaskClicked` and `AddCategoryClicked` handle user interactions for adding tasks and categories.
+- **Data Binding**: The `BindingContext` for the page is typically an instance of `NewTaskViewModel`.
+- **User Prompts and Alerts**: Uses methods such as `DisplayPromptAsync` and `DisplayAlert` to interact with users and validate inputs.
+
+### Code Breakdown
+```csharp
+using Tasker.MVVM.Models;
+using Tasker.MVVM.ViewModels;
+
+namespace Tasker.MVVM.Views;
+
+public partial class NewTaskView : ContentPage
+{
+    public NewTaskView()
+    {
+        InitializeComponent();
+    }
+
+    private async void AddTaskClicked(object sender, EventArgs e)
+    {
+        var vm = BindingContext as NewTaskViewModel;
+
+        var selectedCategory =
+            vm.Categories.Where(x => x.IsSelected == true).FirstOrDefault();
+
+        if (selectedCategory != null)
+        {
+            var task = new MyTask
+            {
+                TaskName = vm.Task,
+                CategoryId = selectedCategory.Id
+            };
+            vm.Tasks.Add(task);
+            await Navigation.PopAsync();
+        }
+        else
+        {
+            await DisplayAlert("Invalid Selection", "You Must select a category", "OK");
+        }
+    }
+
+    private async void AddCategoryClicked(object sender, EventArgs e)
+    {
+        var vm = BindingContext as NewTaskViewModel;
+
+        string category = await DisplayPromptAsync("New Categry",
+            "Write the new category name",
+            maxLength: 15,
+            keyboard: Keyboard.Text);
+
+        var r = new Random();
+
+        if (!string.IsNullOrEmpty(category))
+        {
+            vm.Categories.Add(new Category
+            {
+                Id = vm.Categories.Max(x => x.Id) + 1,
+                Color = Color.FromRgb(
+                      r.Next(0, 255),
+                      r.Next(0, 255),
+                      r.Next(0, 255)).ToHex(),
+                CategoryName = category
+            });
+        }
+    }
+}
+```
+
+### Properties and Methods Explained
+| Property/Method            | Description |
+|----------------------------|-------------|
+| `AddTaskClicked`           | Handles adding a new task, binding data from `NewTaskViewModel`. |
+| `AddCategoryClicked`       | Allows users to create a new category with a random color and add it to the list of categories. |
+| `DisplayAlert`             | Displays a message to the user when an invalid selection is made. |
+| `DisplayPromptAsync`       | Prompts the user to enter a new category name. |
+| `Random Color Generation`  | Random RGB values are generated for new categories to add a unique color. |
+
+### Features Highlight
+- **Adding New Tasks**: Users can add a new task by selecting a category. The selected task is then added to the `Tasks` collection in the `NewTaskViewModel`.
+- **Creating New Categories**: The `AddCategoryClicked` method provides a prompt for users to enter a category name, which is then added to the `Categories` collection with a randomly generated color.
+- **Validation**: Ensures that users cannot add a task without selecting a category, using alerts to enforce this rule.
+
+### References
+1. [.NET MAUI ContentPage Class - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/contentpage?view=net-maui-7.0)
+2. [INotifyPropertyChanged Interface - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged)
+3. [Navigation in .NET MAUI - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation)
+4. [Event Handling in Xamarin.Forms - Microsoft Learn](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/behaviors/event-handler-behaviors)
+
+---
+# ⭐️ Analysis of
