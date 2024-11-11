@@ -18,3 +18,8 @@
 <img width="457" alt="Screenshot 2024-11-11 at 1 25 25 PM" src="https://github.com/user-attachments/assets/763b90f2-20b7-4155-a03b-9f30888b1bbe">
 
 ---
+## 📝 Nuget Package
+```markdown
+- PropertyChanged.Fody
+```
+---
