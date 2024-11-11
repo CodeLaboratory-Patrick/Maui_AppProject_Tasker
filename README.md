@@ -23,3 +23,38 @@
 - PropertyChanged.Fody
 ```
 ---
+## 📂 Core Components - Project Structure
+```markdown
+- Tasker/
+  ├── App.xaml
+  │   ├── App.xaml.cs
+  ├── AppShell.xaml
+  ├── FodyWeavers.xml
+  ├── MainPage.xaml
+  ├── MauiProgram.cs
+  ├── MVVM/
+  │   ├── Models/
+  │   │   ├── Category.cs
+  │   │   └── MyTask.cs
+  │   ├── ViewModels/
+  │   │   ├── MainViewModel.cs
+  │   │   └── NewTaskViewModel.cs
+  │   ├── Views/
+  │       ├── MainView.xaml
+  │       │   └── MainView.xaml.cs
+  │       ├── NewTaskView.xaml
+  │           └── NewTaskView.xaml.cs
+  ├── Converters/
+  │   └── ColorConverter.cs
+  ├── Platforms/
+  ├── Resources/
+  │   ├── AppIcon/
+  │   ├── Fonts/
+  │   ├── Images/
+  │   ├── Raw/
+  │   ├── Splash/
+  │   └── Styles/
+
+
+```
+---
