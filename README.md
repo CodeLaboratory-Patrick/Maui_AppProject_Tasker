@@ -200,3 +200,115 @@ The following table summarizes important properties from the XAML file:
 2. [XAML Overview - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/maui/xaml/?view=net-maui-8.0)
 3. [Grid Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/grid)
 
+---
+# ⭐️ Analysis of NewTaskView.xaml Analysis
+
+This document provides an in-depth analysis of the `NewTaskView.xaml` file, which defines a UI page for adding new tasks in a task management application, presumably named **Tasker**. This page uses .NET MAUI or Xamarin.Forms to manage the task creation process with a clean and user-friendly interface. Below, we will discuss the structure, features, properties, and key components involved in this XAML file.
+
+### General Structure of NewTaskView.xaml
+The `NewTaskView.xaml` defines a `ContentPage` for adding tasks, including an entry field for task input, a category selection area, and action buttons for adding tasks or new categories. The layout is structured primarily with a `Grid` for organizing the UI components into distinct areas.
+
+```xml
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tasker.MVVM.Views.NewTaskView"
+             Title="Add New Task">
+```
+- **xmlns** attributes specify the XAML namespaces required for .NET MAUI.
+- **x:Class** defines the backing C# class of the page.
+- **Title** is set as "Add New Task" to be displayed on the top of the page.
+
+### Layout - Main Grid
+```xml
+<Grid RowDefinitions=".2*, .7*, .1*">
+```
+The main container for the UI is a `Grid`, which is divided into three rows of varying proportions.
+- **RowDefinitions**: The grid contains three rows where:
+  - **.2*** specifies that the first row takes up 20% of the total available height.
+  - **.7*** specifies that the second row occupies 70%.
+  - **.1*** specifies the remaining 10% is for the third row.
+
+### Task Entry Field
+```xml
+<Entry
+    Placeholder="Enter New Task"
+    Text="{Binding Task}"
+    Style="{StaticResource Task}"/>
+```
+- **Entry**: This is a text input field where users can enter the new task.
+  - **Placeholder**: Placeholder text for the `Entry` reads "Enter New Task".
+  - **Text**: The content is bound to the `Task` property from the view model.
+  - **Style**: Uses a static resource named `Task` to apply consistent styling.
+
+### Category Selection (Second Row)
+The second section features a `CollectionView` for selecting categories:
+```xml
+<CollectionView Grid.Column="1"
+                Margin="15"
+                ItemsSource="{Binding Categories}">
+    <CollectionView.ItemsLayout>
+        <GridItemsLayout HorizontalItemSpacing="5"
+                         Orientation="Vertical"
+                         Span="2"
+                         VerticalItemSpacing="5" />
+    </CollectionView.ItemsLayout>
+
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Frame>
+                <RadioButton Content="{Binding CategoryName}"
+                             GroupName="Category"
+                             IsChecked="{Binding IsSelected}" />
+            </Frame>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+```
+- **CollectionView**: Displays a list of categories.
+  - **ItemsSource** is bound to `Categories`, which provides the list of categories available for selection.
+  - **GridItemsLayout**: Arranges items in a grid format with vertical orientation.
+    - **HorizontalItemSpacing** and **VerticalItemSpacing** define the spacing between items.
+    - **Span**: Defines the number of items per row.
+  - **ItemTemplate**: Defines the layout of each item using a `Frame` and a `RadioButton`.
+    - **RadioButton** allows users to select one category at a time. The `GroupName` property groups all the radio buttons so only one can be selected.
+    - **IsChecked**: The selection state of the radio button is data-bound to `IsSelected`.
+
+### Action Buttons (Third Row)
+```xml
+<HorizontalStackLayout
+    Grid.Row="2"
+    Margin="10"
+    HorizontalOptions="CenterAndExpand"
+    Spacing="15"
+    VerticalOptions="Center">
+    <Button CornerRadius="15" Text="Add Task" Clicked="AddTaskClicked"/>
+    <Button CornerRadius="15" Text="Add Category" Clicked="AddCategoryClicked"/>
+</HorizontalStackLayout>
+```
+- **HorizontalStackLayout**: A horizontal container for the action buttons.
+  - **Margin** and **Spacing**: Adds margin around the layout and spacing between the buttons.
+  - **HorizontalOptions** and **VerticalOptions** control alignment.
+- **Buttons**: Two buttons are present in this section.
+  - The first button is labeled "Add Task" and invokes the `AddTaskClicked` event handler.
+  - The second button, labeled "Add Category", invokes the `AddCategoryClicked` event handler.
+  - Both buttons have a **CornerRadius** of 15, giving them rounded corners for a more aesthetic look.
+
+### Properties Breakdown Table
+Below is a summary of important properties from the XAML file:
+
+| Property                | Element            | Description |
+|-------------------------|--------------------|-------------|
+| RowDefinitions          | Grid               | Specifies the height proportions of the grid rows. |
+| Placeholder             | Entry              | Placeholder text for prompting user input. |
+| ItemsSource             | CollectionView     | Binds the data source for displaying the list of categories. |
+| Span                    | GridItemsLayout    | Number of items per row in a grid layout. |
+| GroupName               | RadioButton        | Groups radio buttons to ensure only one can be selected. |
+| IsChecked               | RadioButton        | Binds the selection state to the `IsSelected` property. |
+| CornerRadius            | Button             | Makes the button corners rounded. |
+| Clicked                 | Button             | Event handler invoked when the button is clicked. |
+
+### References
+1. [Grid Layout - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/grid)
+2. [CollectionView in MAUI - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/collectionview?view=net-maui-7.0)
+3. [RadioButton Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/radiobutton)
+
