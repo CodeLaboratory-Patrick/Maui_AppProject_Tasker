@@ -69,7 +69,7 @@ Required Tools:
 
 ```
 ---
-# ⭐️ Analysis of MainView.xaml
+## ⭐️ Analysis of MainView.xaml
 
 This document analyzes the provided `MainView.xaml` file, a Xamarin.Forms or .NET MAUI-based XAML page. The file defines a UI (`ContentPage`) for an application named **Tasker**, which appears to be a task management tool. The content page is structured using various layout controls like `Grid`, `CollectionView`, and other UI elements to present categorized tasks and pending tasks. Below, we provide a detailed breakdown of each part, including the properties and their roles in the UI.
 
@@ -201,7 +201,7 @@ The following table summarizes important properties from the XAML file:
 3. [Grid Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/grid)
 
 ---
-# ⭐️ Analysis of NewTaskView.xaml
+## ⭐️ Analysis of NewTaskView.xaml
 
 This document provides an in-depth analysis of the `NewTaskView.xaml` file, which defines a UI page for adding new tasks in a task management application, presumably named **Tasker**. This page uses .NET MAUI or Xamarin.Forms to manage the task creation process with a clean and user-friendly interface. Below, we will discuss the structure, features, properties, and key components involved in this XAML file.
 
@@ -313,7 +313,7 @@ Below is a summary of important properties from the XAML file:
 3. [RadioButton Class - Xamarin.Forms](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/radiobutton)
 
 ---
-# ⭐️ Analysis of MainView.xaml.cs and NewTaskView.xaml.cs 
+## ⭐️ Analysis of MainView.xaml.cs and NewTaskView.xaml.cs 
 
 This document provides an analysis of two C# code-behind files for the `MainView` and `NewTaskView` pages of the **Tasker** application. These files serve as the backend logic for the corresponding XAML files, managing user interactions and providing dynamic behavior to the application. Let's dive into each file and examine their functionality, properties, and how they contribute to the overall app behavior.
 
@@ -468,7 +468,7 @@ public partial class NewTaskView : ContentPage
 4. [Event Handling in Xamarin.Forms - Microsoft Learn](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/behaviors/event-handler-behaviors)
 
 ---
-# ⭐️ Analysis of ColorConverter.cs
+## ⭐️ Analysis of ColorConverter.cs
 
 This document provides a detailed analysis of the `ColorConverter.cs` file, which defines a custom color converter for use within the **Tasker** application. The color converter class implements `IValueConverter`, allowing it to convert color values between different formats in XAML-based UI frameworks like .NET MAUI or Xamarin.Forms.
 
